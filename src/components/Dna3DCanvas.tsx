@@ -17,7 +17,7 @@ export default function Dna3DCanvas() {
     // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 500);
-    camera.position.set(0, 0, 52);
+    camera.position.set(0, 0, 34);
 
     // 2. High-Performance WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -72,8 +72,8 @@ export default function Dna3DCanvas() {
     // 5. Generate Smooth Continuous Tube Geometry for Both Strands
     const turns = 2.8;
     const heightSpan = 42;
-    const strandRadius = 7.5;
-    const tubeRadius = 1.35; // Thick, bold, sweeping tube
+    const strandRadius = 8.0;
+    const tubeRadius = 1.5; // Thick, macro tube matching reference image
     const pointsCount = 180;
 
     const points1: THREE.Vector3[] = [];
@@ -116,7 +116,7 @@ export default function Dna3DCanvas() {
 
     // 6. Generate Base-Pair Cylindrical Rungs Connecting Strands
     const rungsCount = 38;
-    const rungRadius = 0.42;
+    const rungRadius = 0.45;
 
     for (let i = 0; i < rungsCount; i++) {
       const t = (i + 0.5) / rungsCount;
@@ -143,11 +143,11 @@ export default function Dna3DCanvas() {
       dnaGroup.add(rungMesh);
     }
 
-    // Initial orientation & framing (Zoomed out 70%)
+    // Initial orientation & macro close-up framing (Matching Reference Image)
     dnaGroup.rotation.z = -0.38;
     dnaGroup.rotation.x = 0.22;
     dnaGroup.position.set(-2, 0, 0);
-    dnaGroup.scale.setScalar(0.7);
+    dnaGroup.scale.setScalar(1.1);
 
     // 7. Interactive Drag to Rotate & Mouse Parallax
     let isMouseDown = false;
