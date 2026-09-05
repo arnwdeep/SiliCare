@@ -17,7 +17,7 @@ export default function Dna3DCanvas() {
     // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 500);
-    camera.position.set(0, 0, 36);
+    camera.position.set(0, 0, 52);
 
     // 2. High-Performance WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -143,10 +143,11 @@ export default function Dna3DCanvas() {
       dnaGroup.add(rungMesh);
     }
 
-    // Initial orientation & macro close-up framing
+    // Initial orientation & framing (Zoomed out 70%)
     dnaGroup.rotation.z = -0.38;
     dnaGroup.rotation.x = 0.22;
     dnaGroup.position.set(-2, 0, 0);
+    dnaGroup.scale.setScalar(0.7);
 
     // 7. Interactive Drag to Rotate & Mouse Parallax
     let isMouseDown = false;
