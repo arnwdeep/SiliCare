@@ -139,11 +139,11 @@ export default function Dna3DCanvas() {
       dnaGroup.add(rungMesh);
     }
 
-    // Horizontal sine wave orientation (Exact match to reference screenshot)
+    // Horizontal sine wave orientation (Smaller size)
     dnaGroup.rotation.z = -1.25; // Horizontal layout across hero
     dnaGroup.rotation.x = 0.35;
     dnaGroup.position.set(0, 0, 0);
-    dnaGroup.scale.setScalar(1.05);
+    dnaGroup.scale.setScalar(0.65);
 
     // 7. Interactive Drag to Rotate & Mouse Parallax
     let isMouseDown = false;
