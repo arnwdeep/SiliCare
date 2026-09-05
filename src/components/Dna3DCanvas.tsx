@@ -17,9 +17,9 @@ export default function Dna3DCanvas() {
     // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 500);
-    camera.position.set(0, 0, 34);
+    camera.position.set(0, 0, 36);
 
-    // 2. High-Performance WebGL Renderer
+    // 2. High-Performance WebGL Renderer with Glass Physical Transmission
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -33,48 +33,52 @@ export default function Dna3DCanvas() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.25;
 
     container.appendChild(renderer.domElement);
 
-    // 3. Studio Lighting (Matching Image Soft Studio Clay Shading)
-    const ambientLight = new THREE.AmbientLight(0xf1f5f9, 1.8);
+    // 3. High-Contrast Lighting for Liquid Glass Refraction Highlights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.2);
     scene.add(ambientLight);
 
-    const mainLight = new THREE.DirectionalLight(0xffffff, 2.6);
-    mainLight.position.set(25, 35, 30);
-    mainLight.castShadow = true;
-    mainLight.shadow.mapSize.width = 1024;
-    mainLight.shadow.mapSize.height = 1024;
-    mainLight.shadow.bias = -0.0001;
+    const mainLight = new THREE.DirectionalLight(0xffffff, 4.0);
+    mainLight.position.set(30, 40, 35);
     scene.add(mainLight);
 
-    const fillLight = new THREE.DirectionalLight(0xdbeafe, 1.6);
-    fillLight.position.set(-25, -20, -20);
-    scene.add(fillLight);
+    const backLight = new THREE.DirectionalLight(0xe0f2fe, 3.0);
+    backLight.position.set(-30, -20, -30);
+    scene.add(backLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    rimLight.position.set(0, -30, 20);
-    scene.add(rimLight);
+    const sideLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    sideLight.position.set(0, -30, 30);
+    scene.add(sideLight);
 
     // 4. DNA Group Setup
     const dnaGroup = new THREE.Group();
     scene.add(dnaGroup);
 
-    // Material: Satin Studio Smooth Silver/White (Exact match to reference image)
-    const dnaMaterial = new THREE.MeshStandardMaterial({
-      color: 0xe2e8f0,
-      roughness: 0.32,
-      metalness: 0.12,
-      shadowSide: THREE.DoubleSide,
+    // Liquid Glass / Crystal Acrylic Physical Material (Exact match to screenshot)
+    const glassMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      transmission: 0.94, // High optical transparency for liquid glass
+      opacity: 1.0,
+      transparent: true,
+      roughness: 0.06, // Ultra-smooth glass gloss
+      metalness: 0.05,
+      ior: 1.48, // Index of refraction for liquid acrylic glass
+      thickness: 1.8,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.03,
+      reflectivity: 0.95,
+      emissive: 0x0a101f,
     });
 
     // 5. Generate Smooth Continuous Tube Geometry for Both Strands
-    const turns = 2.8;
-    const heightSpan = 42;
-    const strandRadius = 8.0;
-    const tubeRadius = 1.5; // Thick, macro tube matching reference image
-    const pointsCount = 180;
+    const turns = 3.2;
+    const heightSpan = 46;
+    const strandRadius = 7.8;
+    const tubeRadius = 1.25; // Crystal liquid glass tube
+    const pointsCount = 200;
 
     const points1: THREE.Vector3[] = [];
     const points2: THREE.Vector3[] = [];
@@ -100,23 +104,18 @@ export default function Dna3DCanvas() {
     const curve2 = new THREE.CatmullRomCurve3(points2);
 
     // Tube Geometries
-    const tubeGeo1 = new THREE.TubeGeometry(curve1, 160, tubeRadius, 24, false);
-    const tubeGeo2 = new THREE.TubeGeometry(curve2, 160, tubeRadius, 24, false);
+    const tubeGeo1 = new THREE.TubeGeometry(curve1, 180, tubeRadius, 24, false);
+    const tubeGeo2 = new THREE.TubeGeometry(curve2, 180, tubeRadius, 24, false);
 
-    const tubeMesh1 = new THREE.Mesh(tubeGeo1, dnaMaterial);
-    const tubeMesh2 = new THREE.Mesh(tubeGeo2, dnaMaterial);
-
-    tubeMesh1.castShadow = true;
-    tubeMesh1.receiveShadow = true;
-    tubeMesh2.castShadow = true;
-    tubeMesh2.receiveShadow = true;
+    const tubeMesh1 = new THREE.Mesh(tubeGeo1, glassMaterial);
+    const tubeMesh2 = new THREE.Mesh(tubeGeo2, glassMaterial);
 
     dnaGroup.add(tubeMesh1);
     dnaGroup.add(tubeMesh2);
 
-    // 6. Generate Base-Pair Cylindrical Rungs Connecting Strands
-    const rungsCount = 38;
-    const rungRadius = 0.45;
+    // 6. Generate Glass Cylindrical Rungs Connecting Strands
+    const rungsCount = 42;
+    const rungRadius = 0.38;
 
     for (let i = 0; i < rungsCount; i++) {
       const t = (i + 0.5) / rungsCount;
@@ -125,10 +124,7 @@ export default function Dna3DCanvas() {
 
       const distance = p1.distanceTo(p2);
       const rungGeo = new THREE.CylinderGeometry(rungRadius, rungRadius, distance, 16);
-      const rungMesh = new THREE.Mesh(rungGeo, dnaMaterial);
-
-      rungMesh.castShadow = true;
-      rungMesh.receiveShadow = true;
+      const rungMesh = new THREE.Mesh(rungGeo, glassMaterial);
 
       // Midpoint position
       const midPoint = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
@@ -143,11 +139,11 @@ export default function Dna3DCanvas() {
       dnaGroup.add(rungMesh);
     }
 
-    // Initial orientation & macro close-up framing (Matching Reference Image)
-    dnaGroup.rotation.z = -0.38;
-    dnaGroup.rotation.x = 0.22;
-    dnaGroup.position.set(-2, 0, 0);
-    dnaGroup.scale.setScalar(1.1);
+    // Horizontal sine wave orientation (Exact match to reference screenshot)
+    dnaGroup.rotation.z = -1.25; // Horizontal layout across hero
+    dnaGroup.rotation.x = 0.35;
+    dnaGroup.position.set(0, 0, 0);
+    dnaGroup.scale.setScalar(1.05);
 
     // 7. Interactive Drag to Rotate & Mouse Parallax
     let isMouseDown = false;
@@ -155,10 +151,9 @@ export default function Dna3DCanvas() {
     let previousMouseY = 0;
     let targetRotationX = dnaGroup.rotation.x;
     let targetRotationY = dnaGroup.rotation.y;
-    let autoRotateSpeed = 0.005;
+    let autoRotateSpeed = 0.004;
 
     const onPointerDown = (e: PointerEvent) => {
-      // Allow drag anywhere on window background
       isMouseDown = true;
       setIsDragging(true);
       previousMouseX = e.clientX;
@@ -176,11 +171,10 @@ export default function Dna3DCanvas() {
         previousMouseX = e.clientX;
         previousMouseY = e.clientY;
       } else {
-        // Subtle mouse parallax when not dragging
         const normX = (e.clientX / window.innerWidth - 0.5) * 0.4;
         const normY = (e.clientY / window.innerHeight - 0.5) * 0.3;
         targetRotationY += normX * 0.01;
-        targetRotationX = 0.22 + normY;
+        targetRotationX = 0.35 + normY;
       }
     };
 
@@ -227,12 +221,12 @@ export default function Dna3DCanvas() {
       }
       scrollSpeed *= 0.92;
 
-      // Smooth lerp rotation for 120 FPS liquid movement
+      // Smooth lerp rotation
       dnaGroup.rotation.y += (targetRotationY - dnaGroup.rotation.y) * 0.08;
       dnaGroup.rotation.x += (targetRotationX - dnaGroup.rotation.x) * 0.08;
 
-      // Gentle floating undulating movement
-      dnaGroup.position.y = Math.sin(currentTime * 0.0012) * 0.6;
+      // Subtle liquid wave floating
+      dnaGroup.position.y = Math.sin(currentTime * 0.0015) * 0.4;
 
       renderer.render(scene, camera);
     };
@@ -252,7 +246,7 @@ export default function Dna3DCanvas() {
       }
       tubeGeo1.dispose();
       tubeGeo2.dispose();
-      dnaMaterial.dispose();
+      glassMaterial.dispose();
       renderer.dispose();
     };
   }, []);
@@ -264,10 +258,10 @@ export default function Dna3DCanvas() {
         className="w-full h-full"
         style={{ minHeight: '100vh' }}
       />
-      {/* Subtle Drag Helper Badge */}
-      <div className="absolute bottom-6 left-6 z-20 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur-md border border-slate-200/80 text-[11px] font-medium text-slate-600 shadow-xs">
+      {/* Interactive Helper Badge */}
+      <div className="absolute bottom-6 left-6 z-20 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 text-[11px] font-medium text-slate-700 shadow-xs">
         <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-        <span>Click & Drag to Rotate 3D DNA Model</span>
+        <span>Click & Drag to Rotate 3D Liquid Glass DNA</span>
       </div>
     </div>
   );
