@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import RobotCaptchaModal from "@/components/RobotCaptchaModal";
 import {
   Code2,
   Sparkles,
@@ -163,6 +164,8 @@ const EXPERIENCES = [
 ];
 
 export default function Home() {
+  const [isCaptchaOpen, setIsCaptchaOpen] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"All" | "Full-Stack" | "AI & ML" | "Cloud / Web3">("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -223,6 +226,14 @@ export default function Home() {
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={() => setIsCaptchaOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-all cursor-pointer"
+              title="Re-verify Robot Security"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>{isVerified ? "✓ Human Verified" : "Robot Auth"}</span>
+            </button>
             <button
               onClick={handleCopyEmail}
               className="flex items-center gap-2 px-4 py-2 text-xs font-mono rounded-lg glass-panel hover:bg-slate-800/80 text-slate-300 hover:text-cyan-400 transition-all border border-slate-700/50"
@@ -736,6 +747,15 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Robot Security Authentication Modal */}
+      <RobotCaptchaModal
+        isOpen={isCaptchaOpen}
+        onVerifySuccess={() => {
+          setIsCaptchaOpen(false);
+          setIsVerified(true);
+        }}
+      />
     </div>
   );
 }
