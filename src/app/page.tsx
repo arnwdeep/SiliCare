@@ -80,7 +80,10 @@ export default function Home() {
 
       {/* Hero Section with Floating Glass Cards matching reference image */}
       <main className="relative z-10">
-        <GlassConceptCards onExploreClick={scrollToCatalog} />
+        <GlassConceptCards
+          onExploreClick={scrollToCatalog}
+          onOpenRxUpload={() => setIsRxUploadOpen(true)}
+        />
 
         {/* Feature Highlights Bar */}
         <section className="relative z-20 bg-white/90 backdrop-blur-md border-y border-slate-200/80 py-8 shadow-xs">
