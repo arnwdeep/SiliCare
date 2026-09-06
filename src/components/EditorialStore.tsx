@@ -2,13 +2,12 @@
 
 import React, { useState } from 'react';
 import { MedicalProduct, MEDICAL_PRODUCTS } from '../data/medicalProducts';
-import { ShoppingBag, ArrowRight, Check, Eye, FileText, ChevronRight, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, ArrowRight, Check, Eye, ShieldCheck, Truck, Package, HeartPulse } from 'lucide-react';
 import SiliCareLogo from './SiliCareLogo';
 
 interface EditorialStoreProps {
   cartCount: number;
   onOpenCart: () => void;
-  onOpenRxUpload: () => void;
   onAddToCart: (product: MedicalProduct) => void;
   onQuickView: (product: MedicalProduct) => void;
 }
@@ -16,15 +15,22 @@ interface EditorialStoreProps {
 export default function EditorialStore({
   cartCount,
   onOpenCart,
-  onOpenRxUpload,
   onAddToCart,
   onQuickView,
 }: EditorialStoreProps) {
-  const [activeCategory, setActiveCategory] = useState<string>('Genomics');
+  const [activeCategory, setActiveCategory] = useState<string>('All');
   const [selectedProductIndex, setSelectedProductIndex] = useState(0);
   const [addedIds, setAddedIds] = useState<{ [key: string]: boolean }>({});
 
-  const categories = ['Genomics', 'Diagnostics', 'Clinical Devices', 'Protective Gear', 'Supplements', 'Emergency'];
+  const categories = [
+    'All',
+    'Bandages & Dressings',
+    'First Aid Kits',
+    'Wound Care & Antiseptics',
+    'Health Monitors',
+    'Personal Care & Gloves',
+    'Pain & Recovery',
+  ];
 
   // Filter products by selected category
   const filteredProducts = MEDICAL_PRODUCTS.filter(
@@ -56,7 +62,7 @@ export default function EditorialStore({
             </div>
 
             {/* Category Navigation Menu */}
-            <nav className="flex flex-col gap-3 text-xs font-semibold text-slate-500 mb-16">
+            <nav className="flex flex-col gap-3 text-xs font-semibold text-slate-500 mb-12">
               {categories.map((cat) => (
                 <button
                   key={cat}
@@ -96,16 +102,16 @@ export default function EditorialStore({
           {/* Column 1 Specification Footer */}
           <div className="pt-8 border-t border-slate-300/60 space-y-4 text-xs text-slate-600">
             <div>
-              <div className="font-bold text-slate-950">Specification</div>
-              <div className="text-[11px] text-slate-500 mt-1">High-Throughput Clinical Testing</div>
+              <div className="font-bold text-slate-950">Over-The-Counter Medical</div>
+              <div className="text-[11px] text-slate-500 mt-1">100% No Doctor Prescription Required</div>
             </div>
             <div>
-              <div className="text-[11px] text-slate-500">Ships within</div>
-              <div className="font-semibold text-slate-900">24 Hours (Cold-Chain)</div>
+              <div className="text-[11px] text-slate-500">Shipping Guarantee</div>
+              <div className="font-semibold text-slate-900">Ships Same Day to Your Door</div>
             </div>
             <div>
-              <div className="text-[11px] text-slate-500">Regulatory Approval</div>
-              <div className="font-semibold text-slate-900">FDA Cleared / CLIA Accredited</div>
+              <div className="text-[11px] text-slate-500">Quality Assurance</div>
+              <div className="font-semibold text-slate-900">FDA Registered & Sterile Packaged</div>
             </div>
           </div>
         </div>
@@ -121,24 +127,25 @@ export default function EditorialStore({
 
           <div className="space-y-6 text-xs text-slate-600">
             <div>
-              <div className="text-[11px] font-semibold text-slate-400">Clinical Grade:</div>
+              <div className="text-[11px] font-semibold text-slate-400">Order Standard:</div>
               <div className="text-slate-900 font-medium">{currentProduct.badge}</div>
             </div>
             <div>
-              <div className="text-[11px] font-semibold text-slate-400">Prescription Standard:</div>
-              <div className="text-slate-900 font-medium">
-                {currentProduct.rxRequired ? 'Rx Prescription Required' : 'Over-The-Counter (OTC)'}
+              <div className="text-[11px] font-semibold text-slate-400">Doctor Requirement:</div>
+              <div className="text-emerald-700 font-bold flex items-center gap-1">
+                <Check className="w-3.5 h-3.5" />
+                <span>No Prescription Needed</span>
               </div>
             </div>
             <div>
-              <div className="text-[11px] font-semibold text-slate-400">Lab Standards:</div>
-              <div className="text-slate-900 font-medium">ISO 13485 Certified Facility</div>
+              <div className="text-[11px] font-semibold text-slate-400">Sterility Standard:</div>
+              <div className="text-slate-900 font-medium">100% Sealed & Sterile Envelopes</div>
             </div>
 
             <div className="pt-6 border-t border-slate-300/60">
               <div className="text-[11px] text-slate-500">Material Composition:</div>
               <div className="font-semibold text-slate-900 mt-0.5">
-                Medical Grade Titanium, Sterile Polymer, Bio-Compatible Silicon
+                Medical Woven Fabric, Non-Stick Absorbent Pad, Latex-Free Adhesive
               </div>
             </div>
           </div>
@@ -164,11 +171,13 @@ export default function EditorialStore({
 
             <div className="grid grid-cols-2 gap-4 text-xs text-slate-600 pt-4 border-t border-slate-300/60">
               <div>
-                <div className="text-[11px] text-slate-400 uppercase tracking-wider">Dimensions</div>
-                <div className="font-mono font-medium text-slate-900 mt-0.5">3.25"W x 3.25"D x 6.1"H</div>
+                <div className="text-[11px] text-slate-400 uppercase tracking-wider">Specifications</div>
+                <div className="font-mono font-medium text-slate-900 mt-0.5">
+                  {Object.values(currentProduct.specifications)[0] || 'Sterile Pack'}
+                </div>
               </div>
               <div>
-                <div className="text-[11px] text-slate-400 uppercase tracking-wider">Price & Unit</div>
+                <div className="text-[11px] text-slate-400 uppercase tracking-wider">Direct Price</div>
                 <div className="font-bold text-slate-950 text-sm mt-0.5">${currentProduct.price.toFixed(2)}</div>
               </div>
             </div>
@@ -178,7 +187,7 @@ export default function EditorialStore({
                 onClick={() => onQuickView(currentProduct)}
                 className="text-xs font-semibold text-slate-950 underline underline-offset-4 hover:text-blue-600 transition-colors"
               >
-                Learn About {currentProduct.name.split(' ')[0]} →
+                View Full Product Details →
               </button>
 
               <button
@@ -197,7 +206,7 @@ export default function EditorialStore({
                 ) : (
                   <>
                     <ShoppingBag className="w-4 h-4" />
-                    <span>Add to Order (${currentProduct.price.toFixed(2)})</span>
+                    <span>Add to Cart (${currentProduct.price.toFixed(2)})</span>
                   </>
                 )}
               </button>
@@ -211,10 +220,10 @@ export default function EditorialStore({
           
           {/* Right Top Header Navigation matching reference screenshot */}
           <div className="flex items-center justify-end gap-6 text-xs font-medium text-slate-600">
-            <button onClick={onOpenRxUpload} className="hover:text-slate-950 transition-colors flex items-center gap-1 cursor-pointer">
-              <FileText className="w-3.5 h-3.5 text-blue-600" />
-              <span>Rx Upload</span>
-            </button>
+            <div className="hidden lg:flex items-center gap-1.5 text-emerald-700 font-bold bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Direct Consumer Store</span>
+            </div>
             <a href="#about" className="hover:text-slate-950 transition-colors">
               Contact
             </a>
@@ -233,19 +242,19 @@ export default function EditorialStore({
           {/* Right Column Specs matching screenshot */}
           <div className="space-y-6 text-xs text-slate-600 mt-20 md:mt-0">
             <div className="text-[11px] font-bold tracking-widest text-slate-400 uppercase">
-              SPECIFICATION METRICS
+              STORE HIGHLIGHTS
             </div>
             <div>
-              <div className="text-[11px] text-slate-500">Composition:</div>
-              <div className="font-semibold text-slate-900">Aluminum / ABS Polycarbonate</div>
+              <div className="text-[11px] text-slate-500">Order Method:</div>
+              <div className="font-semibold text-slate-900">Direct Online Checkout</div>
             </div>
             <div>
-              <div className="text-[11px] text-slate-500">Weight:</div>
-              <div className="font-semibold text-slate-900">190g</div>
+              <div className="text-[11px] text-slate-500">Fast Delivery:</div>
+              <div className="font-semibold text-slate-900">1 - 3 Business Days</div>
             </div>
             <div>
-              <div className="text-[11px] text-slate-500">Origin / Facility:</div>
-              <div className="font-semibold text-slate-900">United States / CLIA Accredited</div>
+              <div className="text-[11px] text-slate-500">Guarantee:</div>
+              <div className="font-semibold text-slate-900">30-Day Unused Money Back</div>
             </div>
           </div>
 
@@ -259,14 +268,14 @@ export default function EditorialStore({
           
           <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-300/60">
             <h3 className="text-xs font-bold tracking-widest text-slate-500 uppercase">
-              CLINICAL PRODUCT COLLECTION ({filteredProducts.length} ITEMS)
+              OTC MEDICAL & FIRST AID SUPPLIES ({filteredProducts.length} PRODUCTS)
             </h3>
-            <span className="text-xs text-slate-500 font-mono">SCROLL GALLERY →</span>
+            <span className="text-xs text-slate-500 font-mono">CLICK ITEM TO SPOTLIGHT →</span>
           </div>
 
           {/* Horizontal Product Grid aligned to vertical grid columns */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {filteredProducts.map((product, idx) => (
+            {filteredProducts.map((product) => (
               <div
                 key={product.id}
                 className="group flex flex-col justify-between cursor-pointer space-y-4"
@@ -279,11 +288,9 @@ export default function EditorialStore({
                     alt={product.name}
                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />
-                  {product.rxRequired && (
-                    <span className="absolute top-3 left-3 bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">
-                      Rx
-                    </span>
-                  )}
+                  <span className="absolute top-3 left-3 bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">
+                    No Rx Needed
+                  </span>
                 </div>
 
                 {/* Product Metadata matching screenshot */}
@@ -292,10 +299,15 @@ export default function EditorialStore({
                     {product.name}
                   </h4>
                   <div className="text-[11px] text-slate-500">
-                    by SiliCare BioTech Labs
+                    by SiliCare Medical Supplies
                   </div>
                   <div className="text-xs font-bold text-slate-900 font-mono pt-1">
                     ${product.price.toFixed(2)}
+                    {product.originalPrice && (
+                      <span className="text-[11px] text-slate-400 line-through font-normal ml-2">
+                        ${product.originalPrice.toFixed(2)}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -324,7 +336,7 @@ export default function EditorialStore({
                   ) : (
                     <>
                       <ShoppingBag className="w-3.5 h-3.5" />
-                      <span>Add to Order</span>
+                      <span>Add to Cart</span>
                     </>
                   )}
                 </button>
@@ -341,7 +353,7 @@ export default function EditorialStore({
           <div className="flex items-center gap-3">
             <SiliCareLogo size="sm" showTagline={false} />
             <span className="text-slate-400">|</span>
-            <span className="font-normal text-slate-500 text-xs">Editorial Clinical Store</span>
+            <span className="font-normal text-slate-500 text-xs">Everyday OTC First Aid & Medical Supplies</span>
           </div>
           <div>
             © {new Date().getFullYear()} SiliCare Medical Technologies, Inc. All rights reserved.

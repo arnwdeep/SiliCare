@@ -83,22 +83,14 @@ export default function CartDrawer({
               </div>
             </div>
 
-            {/* Prescription Warning */}
-            {rxRequiredInCart && (
-              <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-start gap-3">
-                <FileText className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                <div className="text-xs text-amber-900">
-                  <div className="font-bold mb-0.5">Prescription Required (Rx)</div>
-                  Your cart contains prescription medical devices. You will need to upload your doctor's order.
-                  <button
-                    onClick={onOpenRxUpload}
-                    className="block mt-1.5 text-xs font-semibold text-amber-900 underline hover:text-amber-700"
-                  >
-                    Upload Prescription Now →
-                  </button>
-                </div>
+            {/* 100% Direct OTC Guarantee Badge */}
+            <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="text-xs text-emerald-900">
+                <div className="font-bold mb-0.5">100% Direct Consumer Order (No Doctor Required)</div>
+                All items in your cart are over-the-counter medical supplies. Instant home checkout enabled.
               </div>
-            )}
+            </div>
 
             {items.length === 0 ? (
               <div className="text-center py-16 text-slate-400">
