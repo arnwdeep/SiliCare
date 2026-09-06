@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Dna3DCanvas from '@/components/Dna3DCanvas';
 import GlassConceptCards from '@/components/GlassConceptCards';
 import Navbar from '@/components/Navbar';
 import ProductGrid from '@/components/ProductGrid';
@@ -64,9 +63,6 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-[#f7f9fc] text-slate-900 font-sans selection:bg-blue-600 selection:text-white overflow-x-hidden">
-      
-      {/* 3D DNA Double-Helix Background Canvas */}
-      <Dna3DCanvas />
 
       {/* Navigation Bar */}
       <Navbar
