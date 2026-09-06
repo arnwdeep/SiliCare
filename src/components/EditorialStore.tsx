@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { MedicalProduct, MEDICAL_PRODUCTS } from '../data/medicalProducts';
 import { ShoppingBag, ArrowRight, Check, Eye, FileText, ChevronRight, ShieldCheck } from 'lucide-react';
+import SiliCareLogo from './SiliCareLogo';
 
 interface EditorialStoreProps {
   cartCount: number;
@@ -49,10 +50,10 @@ export default function EditorialStore({
         {/* COLUMN 1: Brand & Category Menu & Big Title */}
         <div className="p-6 lg:p-10 flex flex-col justify-between border-b md:border-b-0 border-slate-300/60">
           <div>
-            {/* Brand Title (decork / silicare style) */}
-            <h1 className="text-2xl font-black text-slate-950 tracking-tighter uppercase mb-12">
-              silicare
-            </h1>
+            {/* Official SiliCare Logo Header */}
+            <div className="mb-10">
+              <SiliCareLogo size="md" />
+            </div>
 
             {/* Category Navigation Menu */}
             <nav className="flex flex-col gap-3 text-xs font-semibold text-slate-500 mb-16">
@@ -337,10 +338,10 @@ export default function EditorialStore({
       {/* Footer Medical Quality Bar */}
       <footer className="border-t border-slate-300/60 py-8 bg-[#eeeeef] text-slate-500 text-xs">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-bold text-slate-900 uppercase tracking-widest text-[11px]">
-            <span>silicare</span>
-            <span>—</span>
-            <span className="font-normal text-slate-500">Editorial Clinical Store</span>
+          <div className="flex items-center gap-3">
+            <SiliCareLogo size="sm" showTagline={false} />
+            <span className="text-slate-400">|</span>
+            <span className="font-normal text-slate-500 text-xs">Editorial Clinical Store</span>
           </div>
           <div>
             © {new Date().getFullYear()} SiliCare Medical Technologies, Inc. All rights reserved.
